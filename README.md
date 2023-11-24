@@ -2,7 +2,7 @@
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/pyrexfm)
 
-The documentation for the Vendus API is available here [here](https://www.vendus.pt/ws/). Not all endpoints are available but feel free to contribute!
+The documentation for the Vendus API is available [here](https://www.vendus.pt/ws/). Not all endpoints are available but feel free to contribute!
 
 ## Installation
 

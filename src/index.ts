@@ -44,13 +44,10 @@ export default class VendusClient {
 
   constructor({
     apiKey,
-    baseUrl = "https://api.tink.com",
+    baseUrl = "https://www.vendus.pt/ws/v1.1/",
   }: {
-    clientId: string;
     apiKey: string;
-    clientActorId?: string;
     baseUrl?: string;
-    baseLinkURL?: string;
   }) {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl;
