@@ -1,15 +1,15 @@
-# Tink API Unofficial JavaScript API
+# Vendus API Unofficial JavaScript API
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/pyrexfm)
 
-The documentation for the Tink API is available here [here](https://api.ynab.com). Not all endpoints are available but feel free to contribute!
+The documentation for the Vendus API is available here [here](https://www.vendus.pt/ws/). Not all endpoints are available but feel free to contribute!
 
 ## Installation
 
 First, install the module with npm (or yarn):
 
 ```shell
-npm install tink-sdk
+npm install vendus-sdk
 ```
 
 Then, depending upon your usage context, add a reference to it:
@@ -17,35 +17,32 @@ Then, depending upon your usage context, add a reference to it:
 ### CommonJS / Node
 
 ```typescript
-const tink = require("tink-sdk");
+const vendus = require("vendus-sdk");
 ```
 
 ### ESM / TypeScript
 
 ```typescript
-import TinkClient from "tink-sdk";
+import VendusClient from "vendus-sdk";
 ```
 
 ## Usage
 
-To use this client you must have a Client ID and Client Secret from [Tink console](https://console.tink.com/app-settings/client).
+To use this client you must have an API Key from Vendus.
 
 ```typescript
-import TinkClient from "tink-sdk";
+import VendusClient from "vendus-sdk";
 
-const tink = new TinkClient({
-  clientId: process.env.TINK_CLIENT_ID,
-  clientSecret: process.env.TINK_CLIENT_SECRET,
+const vendus = new VendusClient({
+  apiKey: process.env.VENDUS_API_KEY,
 });
 
-const user = await tink.user.createUser({
+const client = await vendus.clients.createClient({
   externalUserId: "test-user",
   market: "GB",
   locale: "en_US",
 });
 ```
-
-You don't need to generate an access token for each operation as the SDK handles that for you, including requesting new ones when they expire.
 
 ### Error Handling
 
@@ -59,7 +56,7 @@ the response will be thrown as an error to be caught. The error has the followin
   status: 404,
   statusText: "Not found",
   request: {
-    url: `http://tink.api.com/notfound?foo=bar`,
+    url: `https://www.vendus.pt/ws/v1.1/notFound`,
     options: fetchOptions,
   }
   response: "Fetch response object"
