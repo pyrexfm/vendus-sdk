@@ -1,0 +1,37 @@
+{
+  "name": "vendus-sdk",
+  "license": "MIT",
+  "version": "0.0.1",
+  "description": "Unofficial Vendus API SDK for Node.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "keywords": [
+    "vendus",
+    "api",
+    "typescript"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pyrexfm/vendus-sdk"
+  },
+  "author": "Francisco Pires",
+  "devDependencies": {
+    "@types/node": "^20.1.4",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "lint": "tsc",
+    "release": "pnpm run build && pnpm publish"
+  }
+}
