@@ -1,5 +1,7 @@
 import ClientApi from "./clients";
 
+export type { Client, ClientStatus, CreateOrUpdateClient } from "./clients";
+
 export type HeadersType = {
   [key: string]: string;
 };
