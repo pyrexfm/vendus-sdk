@@ -139,8 +139,10 @@ export default class VendusClient {
   }
 
   authenticationHeader() {
+    const token = Buffer.from(this.apiKey + ":").toString("base64");
+
     return {
-      Authorization: `Basic ${this.apiKey}`,
+      Authorization: `Basic ${token}`,
     };
   }
 }
