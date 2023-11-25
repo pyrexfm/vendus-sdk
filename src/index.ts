@@ -110,7 +110,7 @@ export default class VendusClient {
             body: body,
           },
           null,
-          2
+          4
         )
       );
 
