@@ -60,7 +60,7 @@ export default class ClientApi {
     status?: ClientStatus;
     date?: string;
     id?: string;
-  }): Promise<ClientWithoutBalance> {
+  }): Promise<ClientWithoutBalance[]> {
     const response = await this.#client.request({
       endpoint: "clients",
       parameters: {

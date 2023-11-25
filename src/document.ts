@@ -168,7 +168,7 @@ export type ReferenceDocument = {
   document_number: string;
   document_row: string;
   reference_id: string;
-  reference_relation: string;
+  reference_relation?: string;
 };
 
 export type MovementOfGoods = {
