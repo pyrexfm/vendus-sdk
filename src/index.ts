@@ -44,6 +44,7 @@ export type Boolean = "yes" | "no";
 export default class VendusClient {
   apiKey: string;
   baseUrl: string;
+  debug: boolean;
   headers: HeadersType;
   client: ClientApi;
   document: DocumentApi;
@@ -51,12 +52,15 @@ export default class VendusClient {
   constructor({
     apiKey,
     baseUrl = "https://www.vendus.pt/ws/v1.1",
+    debug = false,
   }: {
     apiKey: string;
     baseUrl?: string;
+    debug?: boolean;
   }) {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl;
+    this.debug = debug;
     this.headers = {
       accept: "application/json",
       "User-Agent": "Vendus-Node-JS",
@@ -94,6 +98,14 @@ export default class VendusClient {
     fetchOptions.cache = "no-store";
 
     const url = `${this.baseUrl}/${endpoint}`;
+
+    if (this.debug)
+      console.log(`Sending request to ${url}`, {
+        method: method,
+        headers: fetchOptions.headers,
+        parameters,
+        body: body,
+      });
 
     // Make request
     const response: Response = await fetch(
