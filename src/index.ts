@@ -100,12 +100,19 @@ export default class VendusClient {
     const url = `${this.baseUrl}/${endpoint}`;
 
     if (this.debug)
-      console.log(`Sending request to ${url}`, {
-        method: method,
-        headers: fetchOptions.headers,
-        parameters,
-        body: body,
-      });
+      console.log(
+        `Sending request to ${url}`,
+        JSON.stringify(
+          {
+            method: method,
+            headers: fetchOptions.headers,
+            parameters,
+            body: body,
+          },
+          null,
+          2
+        )
+      );
 
     // Make request
     const response: Response = await fetch(
