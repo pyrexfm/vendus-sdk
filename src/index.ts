@@ -1,6 +1,10 @@
 import ClientApi from "./clients";
 
-export type { Client, ClientStatus, CreateOrUpdateClient } from "./clients";
+export type {
+  Client,
+  ClientStatus,
+  CreateClient as CreateOrUpdateClient,
+} from "./clients";
 
 export type HeadersType = {
   [key: string]: string;
@@ -17,12 +21,11 @@ export type QueryParametersType = {
 export type RequestParameters = RequestBodyParameters | RequestNoBodyParameters;
 
 export interface RequestBodyParameters {
-  method: "POST" | "PUT";
+  method: "POST" | "PUT" | "PATCH";
   endpoint: string;
   parameters?: QueryParametersType;
   headers?: HeadersType;
   body?: BodyType;
-  contentType: "none" | "json" | "x-www-form-urlencoded";
 }
 
 export interface RequestNoBodyParameters {
@@ -64,7 +67,6 @@ export default class VendusClient {
     parameters,
     body,
     method,
-    contentType,
   }: RequestParameters) {
     // Build query string
     const queryParamsString = this.queryParameters(parameters || {});
@@ -74,24 +76,13 @@ export default class VendusClient {
       method: method,
     };
 
-    if (body && contentType !== "none") {
-      if (contentType === "json") {
-        fetchOptions.body = JSON.stringify(body);
-        fetchOptions.headers = {
-          ...this.headers,
-          ...{ "Content-Type": "application/json" },
-          ...headers,
-        };
-      } else {
-        fetchOptions.body = new URLSearchParams(
-          Object.entries(body).map(([k, v]) => [k, v.toString()])
-        );
-        fetchOptions.headers = {
-          ...this.headers,
-          ...{ "Content-Type": "application/x-www-form-urlencoded" },
-          ...headers,
-        };
-      }
+    if (body) {
+      fetchOptions.body = JSON.stringify(body);
+      fetchOptions.headers = {
+        ...this.headers,
+        ...{ "Content-Type": "application/json" },
+        ...headers,
+      };
     } else {
       fetchOptions.headers = { ...this.headers, ...headers };
     }

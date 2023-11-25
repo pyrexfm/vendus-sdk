@@ -1,4 +1,4 @@
-import VendusClient from ".";
+import VendusClient, { type Boolean } from ".";
 
 export type ClientStatus = "active" | "inactive";
 
@@ -33,10 +33,15 @@ export type Client = {
   };
 };
 
-export type CreateOrUpdateClient = Omit<
-  Client,
-  "id" | "balance" | "price_group"
-> & { price_group_id: string };
+export type ClientWithoutBalance = Omit<Client, "balance">;
+
+export type CreateClient = Omit<Client, "id" | "balance" | "price_group"> & {
+  price_group_id: string;
+};
+
+export type UpdateClient = Omit<Client, "balance" | "price_group"> & {
+  price_group_id: string;
+};
 
 export default class ClientApi {
   client: VendusClient;
@@ -53,7 +58,7 @@ export default class ClientApi {
    * @param types - The types of accounts to return
    * @returns the current accounts
    */
-  async getClients(params: {
+  async getClients(params?: {
     q?: string;
     fiscal_id?: string;
     name?: string;
@@ -62,7 +67,7 @@ export default class ClientApi {
     status?: ClientStatus;
     date?: string;
     id?: string;
-  }): Promise<Client> {
+  }): Promise<ClientWithoutBalance> {
     const response = await this.client.request({
       endpoint: "clients",
       parameters: {
@@ -70,6 +75,28 @@ export default class ClientApi {
       },
       headers: this.client.authenticationHeader(),
       method: "GET",
+    });
+
+    return response;
+  }
+
+  async getClient(id: number): Promise<Client> {
+    const response = await this.client.request({
+      endpoint: `clients/${id}`,
+      headers: this.client.authenticationHeader(),
+      method: "GET",
+    });
+
+    return response;
+  }
+
+  async updateClient(params: UpdateClient): Promise<Client> {
+    const { id, ...client } = params;
+    const response = await this.client.request({
+      endpoint: `clients/${id}`,
+      headers: this.client.authenticationHeader(),
+      method: "PATCH",
+      body: client,
     });
 
     return response;
