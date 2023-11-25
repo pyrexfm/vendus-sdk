@@ -39,9 +39,7 @@ export type CreateClient = Omit<Client, "id" | "balance" | "price_group"> & {
   price_group_id: string;
 };
 
-export type UpdateClient = Omit<Client, "balance" | "price_group"> & {
-  price_group_id: string;
-};
+export type UpdateClient = Partial<CreateClient> & { id: number };
 
 export default class ClientApi {
   client: VendusClient;
@@ -97,6 +95,17 @@ export default class ClientApi {
       headers: this.client.authenticationHeader(),
       method: "PATCH",
       body: client,
+    });
+
+    return response;
+  }
+
+  async createClient(params: CreateClient): Promise<Client> {
+    const response = await this.client.request({
+      endpoint: `clients`,
+      headers: this.client.authenticationHeader(),
+      method: "POST",
+      body: params,
     });
 
     return response;
