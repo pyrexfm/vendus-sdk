@@ -1,17 +1,17 @@
-import ClientApi from "./clients";
+import ClientApi from "./client";
 
 export type {
   Client,
   ClientStatus,
   CreateClient as CreateOrUpdateClient,
-} from "./clients";
+} from "./client";
 
 export type HeadersType = {
   [key: string]: string;
 };
 
 export type BodyType = {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | object;
 };
 
 export type QueryParametersType = {
@@ -43,11 +43,11 @@ export default class VendusClient {
   apiKey: string;
   baseUrl: string;
   headers: HeadersType;
-  clients: ClientApi;
+  client: ClientApi;
 
   constructor({
     apiKey,
-    baseUrl = "https://www.vendus.pt/ws/v1.1/",
+    baseUrl = "https://www.vendus.pt/ws/v1.1",
   }: {
     apiKey: string;
     baseUrl?: string;
@@ -58,7 +58,7 @@ export default class VendusClient {
       accept: "application/json",
       "User-Agent": "Vendus-Node-JS",
     };
-    this.clients = new ClientApi({ client: this });
+    this.client = new ClientApi({ client: this });
   }
 
   async request({
@@ -93,7 +93,7 @@ export default class VendusClient {
 
     // Make request
     const response: Response = await fetch(
-      `${url}?${queryParamsString}`,
+      queryParamsString ? `${url}?${queryParamsString}` : url,
       fetchOptions
     );
 
@@ -103,6 +103,7 @@ export default class VendusClient {
         message: `Request failed with status ${response.status}: ${response.statusText}`,
         status: response.status,
         statusText: response.statusText,
+        body: await response.json(),
         request: {
           url: `${url}?${queryParamsString}`,
           options: JSON.stringify(fetchOptions, null, 4),

@@ -6,7 +6,7 @@ export type Client = {
   id: number;
   fiscal_id: string;
   external_reference: string;
-  default_pay_due: string;
+  default_pay_due: "now" | "1" | "15" | "30" | "45" | "60" | "90";
   name: string;
   address: string;
   city: string;
@@ -35,27 +35,22 @@ export type Client = {
 
 export type ClientWithoutBalance = Omit<Client, "balance">;
 
-export type CreateClient = Omit<Client, "id" | "balance" | "price_group"> & {
-  price_group_id: string;
+export type CreateClient = Omit<
+  Partial<Client>,
+  "id" | "balance" | "price_group" | "status" | "date"
+> & {
+  price_group_id?: number;
 };
 
 export type UpdateClient = Partial<CreateClient> & { id: number };
 
 export default class ClientApi {
-  client: VendusClient;
+  #client: VendusClient;
 
   constructor({ client }: { client: VendusClient }) {
-    this.client = client;
+    this.#client = client;
   }
 
-  /**
-   * Returns the current user accounts
-   * @param userAccessToken - The user access token. Requires the accounts:read scope.
-   * @param pageSize - The number of accounts to return per page
-   * @param pageToken - The page token to use for pagination
-   * @param types - The types of accounts to return
-   * @returns the current accounts
-   */
   async getClients(params?: {
     q?: string;
     fiscal_id?: string;
@@ -66,12 +61,12 @@ export default class ClientApi {
     date?: string;
     id?: string;
   }): Promise<ClientWithoutBalance> {
-    const response = await this.client.request({
+    const response = await this.#client.request({
       endpoint: "clients",
       parameters: {
         ...params,
       },
-      headers: this.client.authenticationHeader(),
+      headers: this.#client.authenticationHeader(),
       method: "GET",
     });
 
@@ -79,9 +74,9 @@ export default class ClientApi {
   }
 
   async getClient(id: number): Promise<Client> {
-    const response = await this.client.request({
+    const response = await this.#client.request({
       endpoint: `clients/${id}`,
-      headers: this.client.authenticationHeader(),
+      headers: this.#client.authenticationHeader(),
       method: "GET",
     });
 
@@ -90,9 +85,9 @@ export default class ClientApi {
 
   async updateClient(params: UpdateClient): Promise<Client> {
     const { id, ...client } = params;
-    const response = await this.client.request({
+    const response = await this.#client.request({
       endpoint: `clients/${id}`,
-      headers: this.client.authenticationHeader(),
+      headers: this.#client.authenticationHeader(),
       method: "PATCH",
       body: client,
     });
@@ -101,9 +96,9 @@ export default class ClientApi {
   }
 
   async createClient(params: CreateClient): Promise<Client> {
-    const response = await this.client.request({
+    const response = await this.#client.request({
       endpoint: `clients`,
-      headers: this.client.authenticationHeader(),
+      headers: this.#client.authenticationHeader(),
       method: "POST",
       body: params,
     });
