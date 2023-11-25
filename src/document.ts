@@ -1,4 +1,4 @@
-import VendusClient, { type Boolean } from ".";
+import VendusClient, { UpdateClient, type Boolean } from ".";
 
 export type Document = {
   register_id?: string;
@@ -7,7 +7,7 @@ export type Document = {
   discount_amount?: string;
   discount_percentage?: string;
   date_due?: string;
-  payments: Payment[];
+  payments?: Payment[];
   mode?: "normal" | "tests";
   date?: string;
   date_supply?: string;
@@ -18,10 +18,10 @@ export type Document = {
   ifthenpay?: Boolean;
   eupago?: Boolean;
   multibanco?: Multibanco;
-  client?: Client;
-  supplier: Supplier;
-  items: Item[];
-  movement_of_goods: MovementOfGoods;
+  client?: UpdateClient;
+  supplier?: Supplier;
+  items?: Item[];
+  movement_of_goods?: MovementOfGoods;
   print_discount?: Boolean;
   output?: "pdf" | "html" | "escpos" | "tpasibs";
   output_template_id?: number;
@@ -61,25 +61,6 @@ export type Multibanco = {
   entity: string;
   reference: string;
   amount: string;
-};
-
-export type Client = {
-  id?: string;
-  fiscal_id: string;
-  name?: string;
-  address?: string;
-  postalcode?: string;
-  city?: string;
-  phone?: string;
-  mobile?: string;
-  email?: string;
-  website?: string;
-  notes?: string;
-  country?: string;
-  external_reference?: string;
-  send_email?: string;
-  billing_email?: string;
-  irs_retention?: string;
 };
 
 export type Supplier = {
@@ -177,10 +158,10 @@ export type TaxExemption =
   | "M99"; // Não sujeito; não tributado ou similar
 
 export type TaxCustom = {
-  country?: string;
+  country: string;
   rate: string;
-  code: string;
-  type: string;
+  code: TaxId;
+  type?: string;
 };
 
 export type ReferenceDocument = {

@@ -1,10 +1,12 @@
 import ClientApi from "./client";
+import DocumentApi from "./document";
 
-export type {
-  Client,
-  ClientStatus,
-  CreateClient as CreateOrUpdateClient,
-} from "./client";
+// Export types
+export type * from "./client";
+export type * from "./document";
+
+// Export utils
+export { number, date } from "./utils";
 
 export type HeadersType = {
   [key: string]: string;
@@ -44,6 +46,7 @@ export default class VendusClient {
   baseUrl: string;
   headers: HeadersType;
   client: ClientApi;
+  document: DocumentApi;
 
   constructor({
     apiKey,
@@ -59,6 +62,7 @@ export default class VendusClient {
       "User-Agent": "Vendus-Node-JS",
     };
     this.client = new ClientApi({ client: this });
+    this.document = new DocumentApi({ client: this });
   }
 
   async request({
